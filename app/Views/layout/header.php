@@ -3,6 +3,7 @@
 <html lang="ru" class="tui-bg-blue-black">
 <head>
   <meta charset="UTF-8">
+  <link rel="shortcut icon" type="image/x-icon" href="icon.png" />
   <title><?= htmlspecialchars($title ?? 'Ticket System') ?></title>
   <!-- Styles -->
   <link rel="stylesheet" href="/css/global.css">

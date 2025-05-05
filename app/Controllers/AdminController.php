@@ -3,8 +3,18 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 
+/**
+ * Controller responsible for administrator user management.
+ */
 class AdminController extends Controller
 {
+    /**
+     * Ensure the current user has admin privileges.
+     *
+     * Redirects to the homepage if the user is not an admin.
+     *
+     * @return void
+     */
     private function ensureAdmin()
     {
         if (empty($_SESSION['user']['is_admin'])) {
@@ -12,7 +22,14 @@ class AdminController extends Controller
         }
     }
 
-    // Показываем форму
+    /**
+     * Show the form for creating a new admin user.
+     *
+     * Pulls any validation errors and previous input from the session,
+     * clears them, and renders the creation view.
+     *
+     * @return void
+     */
     public function showCreateForm()
     {
         $this->ensureAdmin();
@@ -25,7 +42,16 @@ class AdminController extends Controller
         $this->view('admin/create_user', compact('errors','old'));
     }
 
-    // Обрабатываем сабмит
+    /**
+     * Process the submission of the admin creation form.
+     *
+     * - Validates email format and password fields
+     * - On validation failure, stores errors and old input in session and redirects back
+     * - On success, hashes the password, inserts a new admin user into the database,
+     *   sets a success message in session, and redirects back to the form
+     *
+     * @return void
+     */
     public function create()
     {
         $this->ensureAdmin();
@@ -61,7 +87,6 @@ class AdminController extends Controller
             ");
             $stmt->execute([$email, $hash]);
         } catch (\PDOException $e) {
-            // например, нарушение UNIQUE email
             $_SESSION['errors'] = ['User already exists.'];
             $_SESSION['old']    = ['email'=>$email];
             header('Location: /admin/users/create'); exit;
