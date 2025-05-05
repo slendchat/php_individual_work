@@ -8,34 +8,73 @@ class TicketController extends Controller
     public function index()
     {
         global $db;
+
         $isLoggedIn = !empty($_SESSION['user']);
         $isAdmin    = $isLoggedIn && $_SESSION['user']['is_admin'];
 
-        if (!$isLoggedIn) {
-            // только Open
-            $where = "WHERE status = 'Open'";
-            $title = 'Open Tickets';
-        } elseif (!$isAdmin) {
-            // Open + Closed
-            $where = "WHERE status IN ('Open','Closed')";
-            $title = 'Active Tickets';
-        } else {
-            // админ — всё
-            $where = "";
-            $title = 'All Tickets';
+        // 1) Читаем GET-фильтры
+        $q        = trim($_GET['q']       ?? '');
+        $category =       $_GET['category'] ?? '';
+        $priority =       $_GET['priority'] ?? '';
+
+        // 2) Собираем WHERE-части
+        $whereParts = [];
+        $params     = [];
+
+        // — статусный фильтр: даём пользователю **все** тикеты из тех, что он может видеть
+        if ($isAdmin) {
+            // админ видит **все**: не добавляем фильтра по статусу
+        }
+        elseif ($isLoggedIn) {
+            // обычный залогиненный — Open и Closed
+            $whereParts[] = "status IN ('Open','Closed')";
+        }
+        else {
+            // гость — только Open
+            $whereParts[] = "status = 'Open'";
         }
 
+        // — текстовый поиск по заголовку
+        if ($q !== '') {
+            $whereParts[] = 'title LIKE ?';
+            $params[]     = "%{$q}%";
+        }
+
+        // — фильтр по категории
+        if ($category !== '') {
+            $whereParts[] = 'category = ?';
+            $params[]     = $category;
+        }
+
+        // — фильтр по приоритету
+        if ($priority !== '') {
+            $whereParts[] = 'priority = ?';
+            $params[]     = $priority;
+        }
+
+        // 3) Строим SQL
         $sql = "
             SELECT id, title, category, status, created_at
             FROM tickets
-            $where
-            ORDER BY created_at DESC
         ";
-        $stmt = $db->prepare($sql);
-        $stmt->execute();
+        if ($whereParts) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereParts);
+        }
+        $sql .= ' ORDER BY created_at DESC';
+
+        // 4) Выполняем
+        $stmt    = $db->prepare($sql);
+        $stmt->execute($params);
         $tickets = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->view('tickets/index', compact('title','tickets','isAdmin'));
+        // 5) Рендерим вид, передаём фильтры, чтобы префиллить форму
+        $this->view('tickets/index', [
+            'title'   => $isAdmin ? 'All Tickets'
+                      : ($isLoggedIn ? 'Active Tickets' : 'Open Tickets'),
+            'tickets' => $tickets,
+            'isAdmin' => $isAdmin,
+            'filters' => compact('q','category','priority'),
+        ]);
     }
 
     public function show()

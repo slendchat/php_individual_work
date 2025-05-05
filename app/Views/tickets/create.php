@@ -1,12 +1,13 @@
 <!-- app/Views/tickets/create.php -->
-<h2><?= htmlspecialchars($title) ?></h2>
 
-<!-- сюда будем выводить клиентские ошибки -->
-<div id="formErrors" class="errors"></div>
-
-<form id="ticketForm" action="/ticket/create" method="post" novalidate>
-  <label>Title:<br>
-    <input 
+<div class="tui-window">
+  <form id="ticketForm" action="/ticket/create" method="post" novalidate>
+  <fieldset class="tui-fieldset tui-border-solid" style="text-align:left;">
+  <legend><?= htmlspecialchars($title) ?></legend>
+  <div class="form-row">
+  <label>Title...........:</label>
+    <input
+      class="tui-input" 
       type="text" 
       name="title"
       id="title"
@@ -14,19 +15,21 @@
       required 
       maxlength="255"
       placeholder="Up to 255 chars">
-  </label><br>
-
-  <label>Description:<br>
-    <textarea 
+    </div>
+  
+  <div class="form-row">
+  <label>Description.....:</label>
+    <textarea
+      class="tui-input"  
       name="description" 
       id="description"
       required
       placeholder="Describe the issue…"><?= htmlspecialchars($old['description'] ?? '') ?></textarea>
-  </label><br>
+  </div>
 
-  <label>Category:<br>
-    <select name="category" id="category" required>
-      <option value="">-- choose --</option>
+  <div class="form-row">
+  <label>Category........:</label>
+    <select multiple class="tui-input" name="category" id="category" required style="width:100%;">
       <?php foreach(['Server','Administration','Network','Other'] as $cat): ?>
         <option value="<?= $cat?>"
           <?= (isset($old['category']) && $old['category']===$cat)?'selected':''?>>
@@ -34,11 +37,13 @@
         </option>
       <?php endforeach; ?>
     </select>
-  </label><br>
-
-  <label>Priority:<br>
-    <?php foreach(['Low','Medium','High'] as $p): ?>
-      <label>
+  </div>
+  
+  <div class="form-row">
+  <label>Priority........:</label>
+  <div>
+  <?php foreach(['Low','Medium','High'] as $p): ?>
+      <label class="tui-radio">
         <input 
           type="radio" 
           name="priority" 
@@ -47,31 +52,42 @@
           <?= (isset($old['priority']) && $old['priority']===$p)?'checked':''?> 
           required>
         <?= $p?>
+        <span></span>
       </label>
     <?php endforeach; ?>
-  </label><br>
-
-  <label>Due Date:<br>
-    <input 
+  </div>
+    </div>
+<div class="form-row">
+  <label>Due Date........:</label>
+    <input
+      class="tui-input"
       type="date" 
       name="due_date" 
       id="due_date"
       value="<?= htmlspecialchars($old['due_date'] ?? '') ?>" 
       required>
-  </label><br>
+  
 
-  <label>
-    <input 
+  <label class="tui-checkbox">
+    <input
       type="checkbox" 
       name="is_urgent" 
       id="is_urgent" 
       value="1"
       <?= !empty($old['is_urgent']) ? 'checked' : '' ?>>
     Mark as urgent
-  </label><br>
+    <span></span>
+  </label>
+  </div>
+  <div class="center">
+    <button class="tui-button" type="submit">Create Ticket</button>
+  </div>
+  </fieldset>
+  </form>
+</div>
 
-  <button type="submit">Create Ticket</button>
-</form>
+<!-- сюда будем выводить клиентские ошибки -->
+<div id="formErrors" class="errors"></div>
 
 <script>
 (function(){

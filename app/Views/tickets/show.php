@@ -1,6 +1,6 @@
-<h2><?= htmlspecialchars($title) ?></h2>
+ <h2><?= htmlspecialchars($title) ?></h2> 
 
-<table>
+<table class="ticket-info-table">
   <tr><th>ID:</th><td><?= htmlspecialchars($ticket['id']) ?></td></tr>
   <tr><th>Title:</th><td><?= htmlspecialchars($ticket['title']) ?></td></tr>
   <tr><th>Description:</th><td><pre><?= htmlspecialchars($ticket['description']) ?></pre></td></tr>

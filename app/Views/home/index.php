@@ -1,3 +1,16 @@
 <!-- app/Views/home/index.php -->
-<h1><?= htmlspecialchars($welcome) ?></h1>
-<p>Это первая страница твоего приложения.</p>
+<div class="home-page">
+    <div class="tui-window">
+        <fieldset class="tui-fieldset no-border">
+            <legend>
+                <?= htmlspecialchars($welcome) ?>
+            </legend>
+            <b>Here you can:</b> <br><br>
+            <ul>
+                <li>Assign tickets</li>
+                <li>View tickets</li>
+                <li>Use control panel (<u>admin only</u>)</li>
+            </ul>
+        </fieldset>
+    </div>
+</div>

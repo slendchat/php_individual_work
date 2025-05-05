@@ -1,0 +1,43 @@
+/* ticket create */
+
+div.tui-window {
+    width: 650px !important;
+}
+  
+.tui-input, .tui-textarea {
+  width: 100%;
+  box-sizing: border-box; 
+  overflow: hidden;
+}
+
+textarea.tui-input {
+    height: 150px !important;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: .5rem;
+}
+  
+.form-row label {
+    white-space: nowrap;
+}
+
+/* buttons */
+
+.button-row {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+/* ticket list */
+.ticket-list {
+
+}
+
+/* .ticket-info-table{
+    color: white;
+} */
