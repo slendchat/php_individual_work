@@ -1,4 +1,3 @@
-<!-- app/Views/auth/login.php -->
 
 <?php if (!empty($_SESSION['success'])): ?>
   <div class="success">

@@ -35,7 +35,7 @@ class AuthController extends Controller
         $email = trim($_POST['email'] ?? '');
         $pass  = $_POST['password'] ?? '';
         if (!$email || !$pass) {
-            $_SESSION['errors'] = ['Заполните все поля.'];
+            $_SESSION['errors'] = ['Fill every field.'];
             header('Location: /login'); exit;
         }
 
@@ -46,13 +46,13 @@ class AuthController extends Controller
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$user || !password_verify($pass, $user['password_hash'])) {
-            $_SESSION['errors'] = ['Неверный логин или пароль.'];
+            $_SESSION['errors'] = ['The wrong login or password.'];
             header('Location: /login'); exit;
         }
 
 
         $_SESSION['user']     = ['id'=>$user['id'],'email'=>$user['email'],'is_admin'=>$user['is_admin']];
-        $_SESSION['success']  = 'Вы вошли как '.$user['email'];
+        $_SESSION['success']  = 'You logged in as '.$user['email'];
         header('Location: /'); exit;
     }
 
@@ -87,11 +87,11 @@ class AuthController extends Controller
 
         $errors = [];
         if (!$email || !$pass1 || !$pass2) {
-            $errors[] = 'Все поля обязательны.';
+            $errors[] = 'All fields requiered.';
         } elseif ($pass1 !== $pass2) {
-            $errors[] = 'Пароли не совпадают.';
+            $errors[] = 'Passwords do not match.';
         } elseif (strlen($pass1)<6) {
-            $errors[] = 'Пароль минимум 6 символов.';
+            $errors[] = 'Password length at least 6 characters.';
         }
 
         if ($errors) {
@@ -105,11 +105,11 @@ class AuthController extends Controller
         try {
             $stmt->execute([$email,$hash]);
         } catch(\PDOException $e) {
-            $_SESSION['errors'] = ['Пользователь уже существует.'];
+            $_SESSION['errors'] = ['User already exists.'];
             header('Location: /register'); exit;
         }
 
-        $_SESSION['success'] = 'Регистрация прошла успешно, войдите.';
+        $_SESSION['success'] = 'Registration successful. Please log in.';
         header('Location: /login'); exit;
         exit;
     }

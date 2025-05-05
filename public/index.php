@@ -1,16 +1,19 @@
 <?php
-// public/index.php
 
-// 1) Подключаем конфиг (он инициализирует PDO и сессии)
+// PDO initializtion
 require __DIR__ . '/../config/config.php';
 
-// 2) Собственный автолоадер PSR-4–like
+/**
+ * Loader
+ * @param  string  $class  Fully-qualified class name (including namespace).
+ * @return void
+ */
 spl_autoload_register(function($class) {
-    // префикс нашего неймспейса
+    // namespace prefix
     $prefix = 'App\\';
     $baseDir = __DIR__ . '/../app/';
 
-    // если класс не наш, выходим
+    // return if wrong class
     if (strpos($class, $prefix) !== 0) {
         return;
     }
@@ -24,12 +27,11 @@ spl_autoload_register(function($class) {
     }
 });
 
-// 3) Запускаем маршрутизацию
+// Router and register application routes
 use App\Core\Router;
 
 $router = new Router();
 $router->get('/', 'HomeController@index');
-// позже добавим другие роуты...
 
 // Auth
 $router->get('/login',       'AuthController@showLoginForm');
@@ -52,10 +54,10 @@ $router->post('/ticket/status',  'TicketController@changeStatus');
 $router->get('/tickets',         'TicketController@index');
 $router->get('/ticket',          'TicketController@show');
 
-// только для админа
+// admin only
 $router->get('/admin/users/create',  'AdminController@showCreateForm' );
 $router->post('/admin/users/create',  'AdminController@create' );
 
 
-// далее тикеты, админ и т.п.
+// Dispatcher - calls the corresponding controller action or sends a 404.
 $router->dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

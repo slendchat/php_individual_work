@@ -1,14 +1,30 @@
 <?php
-// config/config.php
+/** 
+ * Application configuration file.
+ */
+
 session_start();
 
-// Получаем настройки из окружения (env_file в docker-compose)
-$host = getenv('DB_HOST') ?: 'localhost';
+/**
+ * Establishes a PDO connection to the MySQL database using env vars from docker-compose
+ *
+ * @var string
+ * @var string
+ * @var string
+ * @var string
+ */
+$host = getenv('DB_HOST') ?: 'db';
 $db   = getenv('DB_NAME') ?: 'tickets';
 $user = getenv('DB_USER') ?: 'app';
 $pass = getenv('DB_PASS') ?: '';
 
-// Подключаемся к БД
+/**
+ * PDO instance for database connection.
+ *
+ * On failure, terminates execution with an error message.
+ *
+ * @var \PDO
+ */
 try {
     $db = new PDO(
         "mysql:host={$host};dbname={$db};charset=utf8",
@@ -17,6 +33,5 @@ try {
         [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ]
     );
 } catch (PDOException $e) {
-    // На проде не выводите ошибку — логируйте в файл
-    die("Database connection failed: " . $e->getMessage());
+    // die("Database connection failed: " . $e->getMessage());
 }

@@ -4,7 +4,7 @@ services:
   db:
     image: mysql:8.0
     env_file:
-      - .env       # тут тоже можно, чтобы MYSQL_USER/PASSWORD взял
+      - .env       
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASS}
       - MYSQL_DATABASE=${DB_NAME}
@@ -19,7 +19,7 @@ services:
     build: .
     env_file:
       - .env
-    volumes:
+    volumes:                # mounts php
       - ./:/var/www/html
     ports:
       - "8080:80"
