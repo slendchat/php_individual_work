@@ -9,3 +9,7 @@
 p{
   color: white;
 } */
+
+body {
+  overflow: hidden;
+}

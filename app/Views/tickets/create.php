@@ -87,56 +87,68 @@
 </div>
 
 <!-- сюда будем выводить клиентские ошибки -->
-<div id="formErrors" class="errors"></div>
+
+<div id="tui-error" class="tui-window red-168" style="margin-bottom: 2rem;">
+  <fieldset class="tui-fieldset">
+    <legend class="yellow-255-text">Alert</legend>
+    <div id="formErrors" class="errors"></div>
+  </fieldset>
+</div>
 
 <script>
 (function(){
   const form = document.getElementById('ticketForm');
   const errorsDiv = document.getElementById('formErrors');
+  const errorWindow = document.getElementById('tui-error');
+
+  // Изначально скрываем окно ошибок
+  errorWindow.style.display = 'none';
 
   form.addEventListener('submit', function(e) {
     errorsDiv.innerHTML = '';
     const errs = [];
 
+    // Валидация полей
     const title = document.getElementById('title').value.trim();
     if (!title) {
-      errs.push('Title is required.');
+      errs.push('• Title is required');
     } else if (title.length > 255) {
-      errs.push('Title must be 255 characters or fewer.');
+      errs.push('• Title must be 255 characters or fewer');
     }
 
     const description = document.getElementById('description').value.trim();
     if (!description) {
-      errs.push('Description is required.');
+      errs.push('• Description is required');
     }
 
     const category = document.getElementById('category').value;
     if (!category) {
-      errs.push('Category must be selected.');
+      errs.push('• Category must be selected');
     }
 
-    // at least one priority radio checked?
     if (!form.priority.value) {
-      errs.push('Please choose a priority.');
+      errs.push('• Please choose a priority');
     }
 
     const dueDateValue = document.getElementById('due_date').value;
     if (!dueDateValue) {
-      errs.push('Due date is required.');
+      errs.push('• Due date is required');
     } else {
       const dueDate = new Date(dueDateValue);
       const today = new Date();
       today.setHours(0,0,0,0);
       if (dueDate < today) {
-        errs.push('Due date cannot be in the past.');
+        errs.push('• Due date cannot be in the past');
       }
     }
 
     if (errs.length) {
       e.preventDefault();
-      errorsDiv.innerHTML = errs.map(msg => '<p>'+msg+'</p>').join('');
-      // скроллим к ошибкам
-      errorsDiv.scrollIntoView({ behavior: 'smooth' });
+      errorsDiv.innerHTML = errs.join('<br>');
+      errorWindow.style.display = 'block'; // Показываем окно ошибок
+      errorWindow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      errorWindow.style.display = 'none'; // Скрываем окно ошибок
     }
   });
 })();

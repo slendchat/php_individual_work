@@ -4,14 +4,20 @@
 /** @var bool   $isAdmin */
 /** @var array  $filters */
 ?>
+<div class="ticket-searchbar">
+  <div class="tui-window">
 <form action="/tickets" method="get" class="search-form">
+  <fieldset class="tui-fieldset tui-border-dashed">
+    <legend>Tickets Search</legend>
+  <div class="form-row">
   <input
+    class="tui-input"
     type="text"
     name="q"
-    placeholder="Search by title"
+    placeholder="Ticket Title"
     value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
   
-  <select name="category">
+  <select class="tui-input" name="category">
     <option value="">All categories</option>
     <?php foreach(['Server','Administration','Network','Other'] as $cat): ?>
       <option value="<?= $cat?>"
@@ -21,7 +27,7 @@
     <?php endforeach; ?>
   </select>
   
-  <select name="priority">
+  <select class="tui-input" name="priority">
     <option value="">Any priority</option>
     <?php foreach(['Low','Medium','High'] as $p): ?>
       <option value="<?= $p?>"
@@ -31,8 +37,12 @@
     <?php endforeach; ?>
   </select>
   
-  <button type="submit">Search</button>
+  <button class="tui-button" type="submit">Search</button>
+  </div>
+  </fieldset>
 </form>
+</div>
+</div>
 
 
 <div class="ticket-list">

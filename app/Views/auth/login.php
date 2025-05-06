@@ -1,5 +1,4 @@
-
-<?php if (!empty($_SESSION['success'])): ?>
+<!-- <?php if (!empty($_SESSION['success'])): ?>
   <div class="success">
     <?= htmlspecialchars($_SESSION['success']) ?>
   </div>
@@ -13,11 +12,27 @@
     <?php endforeach; ?>
     <?php unset($_SESSION['errors']); ?>
   </div>
-<?php endif; ?>
+<?php endif; ?> 
 
-<form action="/login" method="post">
-  <label>Email:<br><input type="text" name="email" required></label><br>
-  <label>Пароль:<br><input type="password" name="password" required></label><br>
-  <button type="submit">Войти</button>
+//// есть в header.php
+-->
+
+<div class="login-form">
+  <div class="tui-window">
+  <form action="/login" method="post">
+    <fieldset class="tui-fieldset tui-border-solid">
+      <legend>Enter account</legend>
+      <div class="form-row">
+      <label>Email...............:</label><input class="tui-input" placeholder="johndoe@example.com" type="text" name="email" required>
+      </div>
+      <div class="form-row">
+      <label>Password............:</label><input class="tui-input" placeholder="!ExamplePass123" type="password" name="password" required>
+      </div>
+      <div class="center"><button class="tui-button" type="submit">Log in</button></div>
+  </fieldset>
 </form>
-<p>Нет аккаунта? <a href="/register">Зарегистрируйтесь</a></p>
+  </div>
+  <div class="login-advice center">
+  <p><span class="orange-168">Not registered?</span> <a href="/register"><button class="tui-button blue-255 green-168-text">Sign up</button></a></p>
+  </div>
+</div>
